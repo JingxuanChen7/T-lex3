@@ -2059,7 +2059,7 @@ sub generatefiles {
 	open (FQ, "<$outputdir\/$strain\/$strainname\_cns_MQ.fastq") or die "cannot open file";
 	while(<FQ>){
 		$_ =~ s/\n//g;
-		if ($_ =~/^\@(\w{1,2})$/){
+		if ($_ =~/^\@(\w+)$/){
 			open (CHROM, ">$outputdir\/$strain\/ref_fasta/$1") or die "cannot create";
 			open (MAY, ">$outputdir\/$strain\/chromosomes_up/$1") or die "cannot create";
 			$i = 0;
@@ -2082,6 +2082,8 @@ sub generatefiles {
 			}
 		}
 	}
+	close MAY;
+	close CHROM;
 	# Create view files
 	#print("python scripts\/view_2.py $TE_map $strainname $outputdir\/$strain");
 
