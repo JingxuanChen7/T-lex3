@@ -1949,7 +1949,7 @@ sub generatefiles {
   system("rm -rf $script_filename");
   # Create the script
   open(my $script_file, '>', $script_filename) or die "Cannot open companiuon script for writing: $script_filename";
-  print $script_file "awk -F\$'\\t' '{filename = \"$wd\/chromosomes\/\" \$1; if (length(\$1) <=$chrnamelen) print > filename }' $outputdir\/$strain\/$strainname\_bwa_MQ_pileups";
+  print $script_file "awk -F\$'\\t' '{filename = \"$wd\/chromosomes\/\" \$1; if (length(\$1) <=16) print > filename }' $outputdir\/$strain\/$strainname\_bwa_MQ_pileups";
   close $script_file;
   # Execute it
   system("bash $script_filename");
