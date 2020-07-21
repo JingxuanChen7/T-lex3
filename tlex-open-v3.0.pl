@@ -59,6 +59,7 @@ sub startup {
     my $maxreads=90;
     my $minpop=1;
 	my $chrnamelen=9;
+	my $customTElib;
 
     my $startdirectory=`pwd`; 
     chomp $startdirectory;
@@ -70,6 +71,7 @@ sub startup {
 		'A=i' => \$maxReadLength,
 		'O=s' => \$output,
 		's=s' => \$species,
+		'lib=s' => \$customTElib,
 		'noFilterTE' => \$noFilterTE,
 		'd=f' => \$minflankcov,		
 		'q' => \$bwaonly,
@@ -307,7 +309,8 @@ sub startup {
 	print OUT $flank_coords_check;
 	close OUT;
 	&maptodb("$outputdir\/Tflank_checking\_$flank_check\.map","$outputdir\/Tgenome\.fasta","$outputdir\/Tflank_checking\_$flank_check\.fasta");	
-	system("RepeatMasker -species $species $outputdir\/Tflank_checking\_$flank_check\.fasta");
+	# system("RepeatMasker -species $species $outputdir\/Tflank_checking\_$flank_check\.fasta");
+	system("RepeatMasker -lib $customTElib $outputdir\/Tflank_checking\_$flank_check\.fasta");
 	system("mv $outputdir\/Tflank_checking\_$flank_check\.fasta\.out $outputdir\/Tflank_checking\_$flank_check\.fasta\.masked  $outputdir\/Tanalysis");
 	$flank_coords_check = &extract_flanks("$TE_list","$TE_map","$flank_check","0","yes");
 	open (OUT1, ">$outputdir\/Tpoly\_$flank_check\.map");
