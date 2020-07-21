@@ -1916,7 +1916,8 @@ sub generatefiles {
     # Filter bam by mapping quality 30
     system("samtools view -bq $qual $outputdir\/$strain\/$strainname\_bwa_sorted.bam > $outputdir\/$strain\/$strainname\_bwa_MQ_identity.bam"); 
     # Filter bam by readlength
-    system("samtools view -h $outputdir\/$strain\/$strainname\_bwa_MQ_identity.bam | awk 'length(\$10) > $maxReadLength-1 || \$1 ~ /^@/' | samtools view -bS - > $outputdir\/$strain\/$strainname\_bwa_MQ.bam");
+	system("maxReadLength=$maxReadLength"); # modify to make sure awk works well
+    system("samtools view -h $outputdir\/$strain\/$strainname\_bwa_MQ_identity.bam | awk -v maxReadLength=\$maxReadLength 'length(\$10) > maxReadLength-1 || \$1 ~ /^@/' | samtools view -bS - > $outputdir\/$strain\/$strainname\_bwa_MQ.bam");
     # Make the pileup for all genome; at the same time as the previous step it can be generated the fastq file
     system("samtools mpileup -O -aa -f $refgenome $outputdir\/$strain\/$strainname\_bwa_MQ.bam > $outputdir\/$strain\/$strainname\_bwa_MQ_pileups");
 	system("samtools mpileup -aa -uf $refgenome $outputdir\/$strain\/$strainname\_bwa_MQ.bam | bcftools call -c | vcfutils.pl vcf2fq > $outputdir\/$strain\/$strainname\_cns_MQ.fastq");
